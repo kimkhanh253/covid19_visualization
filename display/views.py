@@ -14,10 +14,14 @@ def spread(request):
             df = pd.read_csv('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv')
             df_state = df[df['state'].str.contains(state)] 
             df_state = df_state.reset_index(drop=True)
-            cases = [df_state['cases'][i] for i in df_state.index]
-            deaths = [df_state['deaths'][i] for i in df_state.index]
+            cases=[]
+            cases.append(0)
+            deaths=[]
+            deaths.append(0)
+            for i in df_state.index[1:]:
+                cases.append(df_state['cases'][i]-df_state['cases'][i-1]) #calculate the change
+                deaths.append(df_state['deaths'][i]-df_state['deaths'][i-1])
             date = [df_state['date'][i] for i in df_state.index]
-
             return render(request,'display/spread.html/', {
                 'form': form,
                 'state': state, 
