@@ -1,0 +1,103 @@
+<fieldset>
+    <form method="POST" action = "">
+        <legend><h3>Select a state to view spread of Covid-19</h3></legend><br>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <br><input type="submit" value="View"/>
+    </form>
+</fieldset>
+
+{% if state %}
+<!doctype html><html>
+  <head>
+    <title>Spread of Covid-19</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/4.3.0/echarts-en.common.min.js"></script>
+  </head>
+  <body> 
+    <p><h3>Spread of Covid-19 in {{state}}</h3></p>
+    <div id="chart" style="width: 1800px; height: 800px;"></div>
+    <script>
+      var state="{{state}}";
+      var date={{date|safe}};
+      var cases={{cases}};
+      var deaths={{deaths}};
+      var data_date=[];
+      var data_cases=[];
+      var data_deaths=[];
+
+      for(var i=0; i<date.length; i++){
+        data_date.push(date[i]);
+        data_cases.push(cases[i])
+        data_deaths.push(deaths[i])
+      }
+      var chart = document.getElementById('chart');
+      var myChart = echarts.init(chart);
+      var option = {
+        title: {
+          text: '',
+          align: 'right'
+        },
+        tooltip : {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross',
+            animation: false,
+            label: {
+                backgroundColor: '#505765'
+            }
+          }
+        },
+        legend: { data:[ 'cases','deaths']},
+        dataZoom: [{
+          show: true,
+          start: 65,
+          end: 85
+        },{
+          type: 'inside',
+          start: 65,
+          end: 85
+        }],
+        xAxis: { data: data_date},
+        yAxis: [
+          {
+            type: 'value',
+            splitLine: {
+              show: false
+            },
+            name: 'cases',
+            show: true,
+          } 
+        ],
+        series: [{
+          name: 'cases',
+          type: 'line',
+          data: data_cases,
+          lineStyle: {
+              color: '#fb8072',
+          },
+          itemStyle: {
+            borderColor: '#fb8072',
+            color: '#fb8072',
+          }
+        },{
+          name: 'deaths',
+          type: 'line',
+          data: data_deaths,
+          lineStyle: {
+              color: '#8dd3c7',
+          },
+          itemStyle: {
+            borderColor: '#8dd3c7',
+            color: '#8dd3c7',
+          }
+        },]
+      };
+      myChart.setOption(option);
+    </script>
+  </body>
+</html>  
+{% elif nodata %}
+  <p>{{nodata}}</p>
+{% else %}
+  <p></p>
+{% endif %}
