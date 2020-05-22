@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .models import spreadForm
 import pandas as pd
+import requests
+import json
 
 def index(request):
     return render(request,'display/index.html/')
@@ -37,4 +39,23 @@ def spread(request):
 
 
 def deathrate(request):
-    return HttpResponse("deathrate")
+    req = requests.get('https://geog4046.github.io/assignment-resources/data/us_state_demographics_ESRI_2010A.geojson')
+    r = req.json()
+    states = ['Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','District of Columbia','Florida','Georgia','Hawaii','Idaho',
+        'Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan','Minnesota','Mississippi',
+        'Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Ohio'
+        ,'Oklahoma','Oregon','Pennsylvania','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virginia',
+        'Washington','West Virginia','Wisconsin','Wyoming']
+    df = pd.read_csv('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv')
+    for s in range (0,51):
+        state_name = states[s]
+        for i in range (0,51):
+            df_state = df[df['state'].str.contains(state_name)] 
+            df_state = df_state.reset_index(drop=True)
+            index = len(df_state.index)-1
+            totalDeaths = df_state['deaths'][index]
+            totalCases = df_state['cases'][index]
+            deathrate = totalDeaths/totalCases * 100
+            if str(r['features'][i]['properties']['STATE_NAME']) == state_name:
+                r['features'][i]['properties']['deathrate'] = round(deathrate,2)
+    return render(request,'display/deathrate.html/',{'data': json.dumps(r)})

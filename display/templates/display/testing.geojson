@@ -1,0 +1,22 @@
+{
+    "type": "FeatureCollection",
+    "features": [{
+        "type": "Feature",
+        "properties": {
+            "icon": "theatre"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [-77.038659, 38.931567]
+        }
+    }, {
+        "type": "Feature",
+        "properties": {
+            "icon": "music"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [-77.007481, 38.876516]
+        }
+    }]
+}

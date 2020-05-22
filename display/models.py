@@ -1,12 +1,8 @@
 from django.db import models
 from django import forms
+#from djgeojson.fields import PolygonField #####################
 
 state = (
-    ('Baton Rouge', 'Baton Rouge, USA'),
-    ('Delhi','Delhi, India'),
-    ('Fresno','Fresno, USA'),
-    ('New York', 'New York, USA'),
-
     ('Alabama','Alabama'),
     ('Alaska','Alaska'),
     ('Arizona','Arizona'),
@@ -15,6 +11,7 @@ state = (
     ('Colorado','Colorado'),
     ('Connecticut','Connecticut'),
     ('Delaware','Delaware'),
+    ('District of Columbia','District of Columbia'),
     ('Florida','Florida'),
     ('Georgia','Georgia'),
     ('Hawaii','Hawaii'),
@@ -31,10 +28,37 @@ state = (
     ('Michigan','Michigan'),
     ('Minnesota','Minnesota'),
     ('Mississippi','Mississippi'),
-    ('Missouri','Missouri')
+    ('Missouri','Missouri'),
+    ('Montana','Montana'),
+    ('Nebraska','Nebraska'),
+    ('Nevada','Nevada'),
+    ('New Hampshire','New Hampshire'),
+    ('New Jersey','New Jersey'),
+    ('New Mexico','New Mexico'),
+    ('New York','New York'),
+    ('North Carolina','North Carolina'),
+    ('North Dakota','North Dakota'),
+    ('Ohio','Ohio'),
+    ('Oklahoma','Oklahoma'),
+    ('Oregon','Oregon'),
+    ('Pennsylvania','Pennsylvania'),
+    ('Rhode Island','Rhode Island'),
+    ('South Carolina','South Carolina'),
+    ('South Dakota','South Dakota'),
+    ('Tennessee','Tennessee'),
+    ('Texas','Texas'),
+    ('Utah','Utah'),
+    ('Vermont','Vermont'),
+    ('Virginia','Virginia'),
+    ('Washington','Washington'),
+    ('West Virginia','West Virginia'),
+    ('Wisconsin','Wisconsin'),
+    ('Wyoming','Wyoming')
+
 
 
 )
 
 class spreadForm (forms.Form):
     state = forms.CharField(widget=forms.Select(choices=state))
+

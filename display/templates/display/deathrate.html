@@ -1,0 +1,130 @@
+{% load leaflet_tags %}
+<html>
+  <head>
+    <title>U.S. Deathrate</title>
+    <!--<link rel="stylesheet" type="text/css" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css">
+    <link rel="stylesheet" type="text/css" href="map3.css"> -->
+    {% leaflet_js %}
+    {% leaflet_css %}
+    <style>
+      .leaflet-container { height: 100%; }
+      #map3Div { height: 100000px }
+    </style>
+    <!-- <div id="map3Div"></div> -->
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/leaflet-0.7.2/leaflet.ajax.min.js"></script>
+    <!-- <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+    <script src="map3.js"></script> -->
+    <script type="text/javascript" src="/js/leaflet-0.7.2/leaflet.ajax.min.js"></script>
+
+    
+  </head>
+  <body>
+    <div id="map"></div>
+    <script type="text/javascript">
+        function map_init_basic (map, options) {
+            
+            var data = {{data|safe}};
+            function onEachFeature(feature, layer) {
+                var name = feature.properties.STATE_NAME
+                var rate = feature.properties.deathrate
+                layer.bindPopup('State name: ' + name + '<br>Death rate: ' + rate )
+            }
+            function style(feature) {
+                var rate = feature.properties.deathrate
+                var color = '#fee0d2'
+                if (rate>8){color = '#67000d'}
+                else if (rate>6){color = '#cb181d'}
+                else if (rate>4){color = '#fb6a4a'}
+                else if (rate>2){color = '#fcbba1'}
+                return{
+                        color: color,
+                        weight: 1,
+                        fillOpacity: 0.5,
+                        fill: true
+                    }
+            }
+            L.geoJSON(data, {
+                style : style,
+                onEachFeature: onEachFeature
+                
+            }).addTo(map);
+            var geojsonFeature = {
+                "type": "Feature",
+                "properties": {
+                    "name": "Coors Field",
+                    "amenity": "Baseball Stadium",
+                    "popupContent": "This is where the Rockies play!"
+                },
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [-104.99404, 39.75621]
+                }
+            };
+            L.geoJSON(geojsonFeature).addTo(map);
+
+            ////////////different example
+            L.marker([30, -90]).addTo(map);
+
+            ////////////different example
+            var myLines = [{
+                "type": "LineString",
+                "coordinates": [[-100, 40], [-105, 45], [-110, 55]]
+            }, {
+                "type": "LineString",
+                "coordinates": [[-105, 40], [-110, 45], [-115, 55]]
+            }];
+
+            var myStyle = {
+                "color": "#ff7800",
+                "weight": 5,
+                "opacity": 0.65
+            };
+
+            L.geoJSON(myLines, {
+                style: myStyle
+            }).addTo(map);
+            
+            ////////////different example
+            var states = [{
+                "type": "Feature",
+                "properties": {"party": "Republican"},
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [[
+                        [-104.05, 48.99],
+                        [-97.22,  48.98],
+                        [-96.58,  45.94],
+                        [-104.03, 45.94],
+                        [-104.05, 48.99]
+                    ]]
+                }
+            }, {
+                "type": "Feature",
+                "properties": {"party": "Democrat"},
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [[
+                        [-109.05, 41.00],
+                        [-102.06, 40.99],
+                        [-102.03, 36.99],
+                        [-109.04, 36.99],
+                        [-109.05, 41.00]
+                    ]]
+                }
+            }];
+
+            L.geoJSON(states, {
+                style: function(feature) {
+                    switch (feature.properties.party) {
+                        case 'Republican': return {color: "#ff0000"};
+                        case 'Democrat':   return {color: "#0000ff"};
+                    }
+                }
+            }).addTo(map);
+        }
+    </script>
+    {% leaflet_map "yourmap" callback="window.map_init_basic" %}
+  </body>
+</html>
+<!--example: https://github.com/makinacorpus/django-leaflet/tree/master/example/mushrooms -->
