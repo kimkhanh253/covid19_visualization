@@ -21,8 +21,8 @@ def spread(request):
             deaths=[]
             deaths.append(0)
             for i in df_state.index[1:]:
-                cases.append(df_state['cases'][i]-df_state['cases'][i-1]) #calculate the change
-                deaths.append(df_state['deaths'][i]-df_state['deaths'][i-1])
+                cases.append(df_state['cases'][i] - df_state['cases'][i-1]) #calculate the change
+                deaths.append(df_state['deaths'][i] - df_state['deaths'][i-1])
             date = [df_state['date'][i] for i in df_state.index]
             return render(request,'display/spread.html/', {
                 'form': form,
@@ -48,13 +48,13 @@ def deathrate(request):
     df = pd.read_csv('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv')
     for s in range (0,51):
         state_name = states[s]
-        for i in range (0,51):
-            df_state = df[df['state'].str.contains(state_name)] 
-            df_state = df_state.reset_index(drop=True)
-            index = len(df_state.index)-1
-            totalDeaths = df_state['deaths'][index]
-            totalCases = df_state['cases'][index]
-            deathrate = totalDeaths/totalCases * 100
+        df_state = df[df['state'].str.contains(state_name)] 
+        df_state = df_state.reset_index(drop=True)
+        index = len(df_state.index)-1
+        totalDeaths = df_state['deaths'][index]
+        totalCases = df_state['cases'][index]
+        deathrate = totalDeaths/totalCases * 100
+        for i in range (0,51):         
             if str(r['features'][i]['properties']['STATE_NAME']) == state_name:
                 r['features'][i]['properties']['deathrate'] = round(deathrate,2)
     return render(request,'display/deathrate.html/',{'data': json.dumps(r)})
