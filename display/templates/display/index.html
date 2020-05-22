@@ -1,11 +1,36 @@
 <html>
     <head>
-        <title>Covid-19 info homepage</title>
+        <title>COVID-19 info homepage</title>
+        <div class="hero-image">
+            <div class="hero-text">
+              <h1><strong>Coronavirus (COVID-19) visualization</strong></h1>
+              <button onclick="window.location.href='/spread'">Spread patterns</button>
+              <button onclick="window.location.href='/deathrate'">Death rate map</button>
+            </div>
+          </div> 
+          <style>
+            body, html {
+                    height: 100%;
+                }
+            .hero-image {
+                background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("https://www.washingtonpost.com/resizer/ahl9OrgfUPFD5jWrjJNsHZ0HiC4=/1484x0/arc-anglerfish-washpost-prod-washpost.s3.amazonaws.com/public/3UUG4JSEFMI6VGOHDX6UEQNC7Y.jpg");
+                height: 50%;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: cover;
+                position: relative;
+                }
+            .hero-text {
+                text-align: center;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                color: white;
+                }
+          </style>
     </head>
     <body>
-        <h3>Spread of Covid-19: </h3>
-        <a href="spread/">link</a>
-        <h3>Death rate of Covid-19: </h3>
-        <a href="deathrate/">link</a>
+        <p>Data source: <a href='https://github.com/nytimes/covid-19-data'>NY Times</a></p>
     </body>
 </html>

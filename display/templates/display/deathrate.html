@@ -1,9 +1,7 @@
 {% load leaflet_tags %}
 <html>
   <head>
-    <title>U.S. Deathrate</title>
-    <!--<link rel="stylesheet" type="text/css" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css">
-    <link rel="stylesheet" type="text/css" href="map3.css"> -->
+    <title>COVID-19 death rate</title>
     {% leaflet_js %}
     {% leaflet_css %}
     <style>
@@ -14,8 +12,6 @@
         font: 14px Arial, Helvetica, sans-serif;
         background: white;
         background: rgba(255, 255, 255, 0.8);
-        /*box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);*/
-        /*border-radius: 5px;*/
         line-height: 24px;
         color: #555;
         }
@@ -44,25 +40,17 @@
         background-color: rgba(255, 255, 255, 1);
         }
     </style>
-    <!-- <div id="map3Div"></div> -->
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script type="text/javascript" src="/js/leaflet-0.7.2/leaflet.ajax.min.js"></script>
-    <!-- <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
-    <script src="map3.js"></script> -->
-    <script type="text/javascript" src="/js/leaflet-0.7.2/leaflet.ajax.min.js"></script>
-
     
   </head>
   <body>
     <div id="map"></div>
     <script type="text/javascript">
-        function map_init_basic (map, options) {
-            
+        function map_init_basic (map, options) {        
             var data = {{data|safe}};
             function onEachFeature(feature, layer) {
                 var name = feature.properties.STATE_NAME
                 var rate = feature.properties.deathrate
-                layer.bindPopup('State name: ' + name + '<br>Death rate: ' + rate )
+                layer.bindPopup('State name: ' + name + '<br>Death rate: ' + rate +'%')
             }
             function style(feature) {
                 var rate = feature.properties.deathrate
@@ -73,8 +61,8 @@
                 else if (rate>2){color = '#fcbba1'}
                 return{
                         color: color,
-                        weight: 1,
-                        fillOpacity: 0.5,
+                        weight: 2,
+                        fillOpacity: 0.7,
                         fill: true
                     }
             }
@@ -83,9 +71,7 @@
                 onEachFeature: onEachFeature
                 
             }).addTo(map);
-
             var legend = L.control({ position: "bottomleft" });
-
             legend.onAdd = function(map) {
             var div = L.DomUtil.create("div", "legend");
             div.innerHTML += "<h2>Death rate</h2>";
@@ -94,95 +80,12 @@
             div.innerHTML += '<i style="background: #fb6a4a"></i><span> 4-6%</span><br>';
             div.innerHTML += '<i style="background: #fcbba1"></i><span> 2-4% </span><br>';
             div.innerHTML += '<i style="background: #fee0d2"></i><span> 0-2% </span><br>';
-            
-            
-
             return div;
             };
-
-            legend.addTo(map);
-
-
-
-
-
-
-            var geojsonFeature = {
-                "type": "Feature",
-                "properties": {
-                    "name": "Coors Field",
-                    "amenity": "Baseball Stadium",
-                    "popupContent": "This is where the Rockies play!"
-                },
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": [-104.99404, 39.75621]
-                }
-            };
-            L.geoJSON(geojsonFeature).addTo(map);
-
-            ////////////different example
-            L.marker([30, -90]).addTo(map);
-
-            ////////////different example
-            var myLines = [{
-                "type": "LineString",
-                "coordinates": [[-100, 40], [-105, 45], [-110, 55]]
-            }, {
-                "type": "LineString",
-                "coordinates": [[-105, 40], [-110, 45], [-115, 55]]
-            }];
-
-            var myStyle = {
-                "color": "#ff7800",
-                "weight": 5,
-                "opacity": 0.65
-            };
-
-            L.geoJSON(myLines, {
-                style: myStyle
-            }).addTo(map);
-            
-            ////////////different example
-            var states = [{
-                "type": "Feature",
-                "properties": {"party": "Republican"},
-                "geometry": {
-                    "type": "Polygon",
-                    "coordinates": [[
-                        [-104.05, 48.99],
-                        [-97.22,  48.98],
-                        [-96.58,  45.94],
-                        [-104.03, 45.94],
-                        [-104.05, 48.99]
-                    ]]
-                }
-            }, {
-                "type": "Feature",
-                "properties": {"party": "Democrat"},
-                "geometry": {
-                    "type": "Polygon",
-                    "coordinates": [[
-                        [-109.05, 41.00],
-                        [-102.06, 40.99],
-                        [-102.03, 36.99],
-                        [-109.04, 36.99],
-                        [-109.05, 41.00]
-                    ]]
-                }
-            }];
-
-            L.geoJSON(states, {
-                style: function(feature) {
-                    switch (feature.properties.party) {
-                        case 'Republican': return {color: "#ff0000"};
-                        case 'Democrat':   return {color: "#0000ff"};
-                    }
-                }
-            }).addTo(map);
+            legend.addTo(map);    
         }
     </script>
     {% leaflet_map "yourmap" callback="window.map_init_basic" %}
+    <button onclick="window.location.href='/spread'">Explore COVID-19 spread patterns</button>
   </body>
 </html>
-<!--example: https://github.com/makinacorpus/django-leaflet/tree/master/example/mushrooms -->

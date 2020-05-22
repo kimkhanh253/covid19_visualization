@@ -1,12 +1,42 @@
-<fieldset>
+<head>
+  <title>COVID-19 info homepage</title>
+  <div class="hero-image">
+      <div class="hero-text">
+        <h1><strong>COVID-19 spread patterns</strong></h1>
+      </div>
+    </div> 
+    <style>
+      body, html {
+              height: 80%;
+          }
+      .hero-image {
+          background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("https://www.washingtonpost.com/resizer/ahl9OrgfUPFD5jWrjJNsHZ0HiC4=/1484x0/arc-anglerfish-washpost-prod-washpost.s3.amazonaws.com/public/3UUG4JSEFMI6VGOHDX6UEQNC7Y.jpg");
+          height: 50%;
+          background-position: center;
+          background-repeat: no-repeat;
+          background-size: cover;
+          position: relative;
+          }
+      .hero-text {
+          text-align: center;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          color: white;
+          }
+    </style>
+</head>
+
+<p><fieldset>
     <form method="POST" action = "">
-        <legend><h3>Select a state to view spread of Covid-19</h3></legend><br>
+        <legend><h3>Select a state to view spread patterns</h3></legend>
         {% csrf_token %}
         {{ form.as_p }}
         <br><input type="submit" value="View"/>
     </form>
-</fieldset>
-
+</fieldset></p>
+<button onclick="window.location.href='/deathrate'">Explore death rate map</button>
 {% if state %}
 <!doctype html><html>
   <head>
@@ -14,7 +44,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/4.3.0/echarts-en.common.min.js"></script>
   </head>
   <body> 
-    <p><h3>Spread of Covid-19 in {{state}}</h3></p>
+    <p><h2>Spread of COVID-19 in {{state}}</h2></p>
     <div id="chart" style="width: 1800px; height: 800px;"></div>
     <script>
       var state="{{state}}";
@@ -47,7 +77,7 @@
             }
           }
         },
-        legend: { data:[ 'cases','deaths']},
+        legend: { data:['Cases','Deaths']},
         dataZoom: [{
           show: true,
           start: 65,
@@ -65,40 +95,45 @@
             splitLine: {
               show: false
             },
-            name: 'cases',
+            name: 'Cases/ Deaths',
             show: true,
           } 
         ],
         series: [{
-          name: 'cases',
+          name: 'Cases',
           type: 'line',
           data: data_cases,
           lineStyle: {
-              color: '#fb8072',
+              color: '#969696',
           },
           itemStyle: {
-            borderColor: '#fb8072',
-            color: '#fb8072',
-          }
+            borderColor: '#969696',
+            color: '#969696',
+          },
+          areaStyle: {
+            color: '#969696',
+          },
         },{
-          name: 'deaths',
+          name: 'Deaths',
           type: 'line',
           data: data_deaths,
           lineStyle: {
-              color: '#8dd3c7',
+              color: '#de2d26',
           },
           itemStyle: {
-            borderColor: '#8dd3c7',
-            color: '#8dd3c7',
-          }
+            borderColor: '#de2d26',
+            color: '#de2d26',
+          },
+          areaStyle: {
+            color: '#de2d26',
+          },
         },]
       };
       myChart.setOption(option);
     </script>
+    <P>***Please note that each point represents number of new cases (or deaths) added each day, not the cumulative cases (or deaths).</P>
   </body>
 </html>  
-{% elif nodata %}
-  <p>{{nodata}}</p>
 {% else %}
   <p></p>
 {% endif %}

@@ -1,5 +1,4 @@
 from django.shortcuts import render
-from django.http import HttpResponse
 from .models import spreadForm
 import pandas as pd
 import requests
@@ -31,7 +30,6 @@ def spread(request):
                 'cases': cases,
                 'deaths': deaths,
                 })
-            #return HttpResponse(cases)
 
     else:
         form = spreadForm()

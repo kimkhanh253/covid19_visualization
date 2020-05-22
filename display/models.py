@@ -1,6 +1,5 @@
-from django.db import models
+#from django.db import models
 from django import forms
-#from djgeojson.fields import PolygonField #####################
 
 state = (
     ('Alabama','Alabama'),
@@ -54,8 +53,6 @@ state = (
     ('West Virginia','West Virginia'),
     ('Wisconsin','Wisconsin'),
     ('Wyoming','Wyoming')
-
-
 
 )
 
