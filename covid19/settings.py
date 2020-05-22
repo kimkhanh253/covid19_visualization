@@ -31,6 +31,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'leaflet',
+    'djgeojson',
     'display.apps.DisplayConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -39,6 +41,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+LEAFLET_CONFIG = {
+    #'SPATIAL_EXTENT': (5.0, 10.0, 40.5, 20.0)
+    'DEFAULT_CENTER': (40.0, -100.0),
+    'DEFAULT_ZOOM': 5,
+   
+
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
